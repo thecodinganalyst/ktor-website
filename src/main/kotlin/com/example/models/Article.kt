@@ -1,18 +1,13 @@
 package com.example.models
 
-import java.util.concurrent.atomic.AtomicInteger
+import org.jetbrains.exposed.sql.*
 
-class Article
+data class Article(val id: Int, val title: String, val body: String)
 
-private constructor(val id: Int, var title: String, var body: String) {
-    companion object {
-        private val idCounter = AtomicInteger()
+object Articles : Table() {
+    val id = integer("id").autoIncrement()
+    val title = varchar("title", 128)
+    val body = varchar("body", 1024)
 
-        fun newEntry(title: String, body: String) = Article(idCounter.getAndIncrement(), title, body)
-    }
+    override val primaryKey = PrimaryKey(id)
 }
-
-val articles = mutableListOf(Article.newEntry(
-    "The drive to develop!",
-    "...it's what keeps me going."
-))
